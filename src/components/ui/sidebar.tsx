@@ -36,7 +36,7 @@ const SidebarLayout = React.forwardRef<
 
 	const onOpenChange = React.useCallback((open: boolean) => {
 		setOpen(open);
-		document.cookie = `${SIDEBAR_STATE_COOKIE}=${open}; path=/; max-age=${
+		document.cookie = `${SIDEBAR_STATE_COOKIE}=${true}; path=/; max-age=${
 			60 * 60 * 24 * 7
 		}`;
 	}, []);

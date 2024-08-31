@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	Bar,
 	BarChart,
+	CartesianGrid,
 	Line,
 	LineChart,
 	ResponsiveContainer,
@@ -12,6 +13,11 @@ import {
 } from 'recharts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
+import {
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
+} from '@/components/ui/chart';
 
 const memberData = [
 	{ name: 'Jan', total: 100 },
@@ -46,7 +52,7 @@ export function DashboardCharts() {
 	);
 
 	return (
-		<div className='grid gap-4 md:grid-cols-2'>
+		<div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
 			<Card>
 				<CardHeader>
 					<CardTitle>Member Growth</CardTitle>
@@ -55,13 +61,15 @@ export function DashboardCharts() {
 					{!mounted ? (
 						<ChartSkeleton />
 					) : (
-						<ResponsiveContainer width='100%' height={300}>
+						<ChartContainer config={{}} className='h-[300px] w-full'>
 							<LineChart data={memberData}>
+								<ChartTooltip content={<ChartTooltipContent />} />
+								<CartesianGrid vertical={false} />
 								<XAxis dataKey='name' />
 								<YAxis />
 								<Line type='monotone' dataKey='total' stroke='#8884d8' />
 							</LineChart>
-						</ResponsiveContainer>
+						</ChartContainer>
 					)}
 				</CardContent>
 			</Card>
@@ -73,13 +81,15 @@ export function DashboardCharts() {
 					{!mounted ? (
 						<ChartSkeleton />
 					) : (
-						<ResponsiveContainer width='100%' height={300}>
+						<ChartContainer config={{}} className='h-[300px] w-full'>
 							<BarChart data={eventData}>
+								<ChartTooltip content={<ChartTooltipContent />} />
+								<CartesianGrid vertical={false} />
 								<XAxis dataKey='name' />
 								<YAxis />
 								<Bar dataKey='total' fill='#8884d8' />
 							</BarChart>
-						</ResponsiveContainer>
+						</ChartContainer>
 					)}
 				</CardContent>
 			</Card>
