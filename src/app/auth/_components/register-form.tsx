@@ -46,7 +46,7 @@ export function RegisterForm() {
 						<Input id='password' type='password' />
 					</div>
 					<Button type='submit' className='w-full'>
-						Create an account
+						<Link href='/'>Create an account</Link>
 					</Button>
 				</div>
 				<div className='mt-4 text-center text-sm'>

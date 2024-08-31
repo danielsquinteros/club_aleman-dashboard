@@ -1,5 +1,3 @@
-'use client';
-
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,7 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 export function NavUser({
 	user,
@@ -43,14 +41,18 @@ export function NavUser({
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={() => redirect('/profile')}>
-						<BadgeCheck className='mr-2 h-4 w-4' /> Profile
-					</DropdownMenuItem>
+					<Link href='/profile'>
+						<DropdownMenuItem>
+							<BadgeCheck className='mr-2 h-4 w-4' /> Profile
+						</DropdownMenuItem>
+					</Link>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>
-					<LogOut className='mr-2 h-4 w-4' /> Log out
-				</DropdownMenuItem>
+				<Link href='/auth/login'>
+					<DropdownMenuItem>
+						<LogOut className='mr-2 h-4 w-4' /> Log out
+					</DropdownMenuItem>
+				</Link>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
