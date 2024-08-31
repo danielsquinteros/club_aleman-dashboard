@@ -1,4 +1,4 @@
-import { historyEventsList } from '@/data/history';
+import { historyEventsList } from '@/db/data/history';
 import { HistoryEvent } from '@/db/schema';
 
 export const history = {

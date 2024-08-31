@@ -1,4 +1,4 @@
-import { membersList } from '@/data/members';
+import { membersList } from '@/db/data/members';
 import { NewMember } from '@/db/schema';
 
 export const members = {

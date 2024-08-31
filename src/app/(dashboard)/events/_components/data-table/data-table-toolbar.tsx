@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from '@/components/ui/data-table-view-options';
 
-import { roles } from '@/data/members';
+import { roles } from '@/db/data/members';
 import { DataTableFacetedFilter } from '@/components/ui/data-table-faceted-filter';
-import { statuses } from '@/data/events';
+import { statuses } from '@/db/data/events';
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;

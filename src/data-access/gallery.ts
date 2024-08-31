@@ -1,4 +1,4 @@
-import { galleryImagesList } from '@/data/gallery';
+import { galleryImagesList } from '@/db/data/gallery';
 import { NewGalleryImage } from '@/db/schema';
 
 export const gallery = {

@@ -95,7 +95,7 @@ const data = {
 				},
 				{
 					title: 'Upload Image',
-					url: '/gallery/upload',
+					url: '/gallery/add',
 					description: 'Upload new images to the gallery',
 				},
 			],

@@ -1,4 +1,4 @@
-import { eventsList } from '@/data/events';
+import { eventsList } from '@/db/data/events';
 import { NewEvent } from '@/db/schema';
 
 export const events = {

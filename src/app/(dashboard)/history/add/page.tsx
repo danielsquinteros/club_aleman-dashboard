@@ -21,7 +21,7 @@ export default function AddHistoryEventPage() {
 		setIsSubmitting(true);
 		try {
 			// Here you would typically make an API call to create the history event
-			// For now, we'll just simulate an API call
+			// For now, we&apos;ll just simulate an API call
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			toast.success('History event added successfully');
@@ -40,9 +40,10 @@ export default function AddHistoryEventPage() {
 			<div className='flex justify-center items-center'>
 				<Card className='min-w-[600px]'>
 					<CardHeader>
-						<CardTitle>Add a new event to the club's history</CardTitle>
+						<CardTitle>Add a new event to the club&apos;s history</CardTitle>
 						<CardDescription>
-							Fill in the form below to add a new event to the club's history.
+							Fill in the form below to add a new event to the club&apos;s
+							history.
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
