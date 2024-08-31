@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { MemberRole } from '@/db/schema';
 import { EditMemberDialog } from '../EditMemberDialog';
 import { format, parseISO } from 'date-fns';
-import { DataTableColumnHeader } from './data-table-column-header';
+import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
 
 export type Member = {
 	id: string;

@@ -13,6 +13,7 @@ import {
 	Atom,
 	History,
 	BookOpenText,
+	UserCircle, // Add this import
 } from 'lucide-react';
 
 import { NavMain } from '@/components/layout/nav-main';
@@ -27,6 +28,7 @@ import {
 	SidebarItem,
 	SidebarLabel,
 } from '@/components/ui/sidebar';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const data = {
 	team: {
@@ -116,10 +118,16 @@ const data = {
 			],
 		},
 		{
+			title: 'Profile',
+			url: '/profile',
+			icon: UserCircle,
+			description: 'Manage your profile',
+		},
+		{
 			title: 'Settings',
 			url: '/settings',
 			icon: Settings,
-			description: 'Manage club settings',
+			description: 'Manage application settings',
 		},
 	],
 	navSecondary: [

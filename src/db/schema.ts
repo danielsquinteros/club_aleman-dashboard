@@ -11,6 +11,13 @@ export const memberRoleSchema = z.enum([
 	'honor_member',
 ]);
 
+export const eventStatusSchema = z.enum([
+	'upcoming',
+	'ongoing',
+	'completed',
+	'cancelled',
+]);
+
 export const memberSchema = z.object({
 	id: z.string(),
 	firstName: z.string(),
@@ -25,6 +32,17 @@ export const galleryImageSchema = z.object({
 	id: z.string(),
 	url: z.string(),
 	title: z.string(),
+	description: z.string().optional(),
+	uploadedAt: z.string(),
+});
+
+export const eventSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	description: z.string(),
+	date: z.string(),
+	location: z.string(),
+	status: eventStatusSchema,
 });
 
 export const historyEventSchema = z.object({
@@ -42,6 +60,19 @@ export type NewMember = {
 	joinDate: string;
 	avatarUrl?: string;
 };
+
+export type Event = z.infer<typeof eventSchema>;
+export type NewEvent = {
+	title: string;
+	description: string;
+	date: string;
+	location: string;
+	status: EventStatus;
+};
+
+export type EventStatus = z.infer<typeof eventStatusSchema>;
 export type MemberRole = z.infer<typeof memberRoleSchema>;
 export type GalleryImage = z.infer<typeof galleryImageSchema>;
 export type HistoryEvent = z.infer<typeof historyEventSchema>;
+
+export type NewGalleryImage = Omit<GalleryImage, 'id' | 'uploadedAt'>;
