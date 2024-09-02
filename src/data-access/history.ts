@@ -1,5 +1,5 @@
 import { historyEventsList } from '@/db/data/history';
-import { HistoryEvent } from '@/db/schema';
+import { NewHistoryEvent } from '@/db/schema';
 
 export const history = {
 	getAll: async () => {
@@ -7,7 +7,7 @@ export const history = {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 		return historyEventsList;
 	},
-	create: async (event: Omit<HistoryEvent, 'id'>) => {
+	create: async (event: NewHistoryEvent) => {
 		const newEvent = {
 			id: crypto.randomUUID(),
 			...event,

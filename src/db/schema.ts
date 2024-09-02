@@ -52,27 +52,15 @@ export const historyEventSchema = z.object({
 });
 
 export type Member = z.infer<typeof memberSchema>;
-export type NewMember = {
-	firstName: string;
-	lastName: string;
-	secondSurname: string;
-	role: MemberRole;
-	joinDate: string;
-	avatarUrl?: string;
-};
+export type NewMember = Omit<Member, 'id'>;
+export type MemberRole = z.infer<typeof memberRoleSchema>;
 
 export type Event = z.infer<typeof eventSchema>;
-export type NewEvent = {
-	title: string;
-	description: string;
-	date: string;
-	location: string;
-	status: EventStatus;
-};
-
+export type NewEvent = Omit<Event, 'id'>;
 export type EventStatus = z.infer<typeof eventStatusSchema>;
-export type MemberRole = z.infer<typeof memberRoleSchema>;
-export type GalleryImage = z.infer<typeof galleryImageSchema>;
-export type HistoryEvent = z.infer<typeof historyEventSchema>;
 
-export type NewGalleryImage = Omit<GalleryImage, 'id' | 'uploadedAt'>;
+export type GalleryImage = z.infer<typeof galleryImageSchema>;
+export type NewGalleryImage = Omit<GalleryImage, 'id'>;
+
+export type HistoryEvent = z.infer<typeof historyEventSchema>;
+export type NewHistoryEvent = Omit<HistoryEvent, 'id'>;

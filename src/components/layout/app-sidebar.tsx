@@ -28,7 +28,6 @@ import {
 	SidebarItem,
 	SidebarLabel,
 } from '@/components/ui/sidebar';
-import { ModeToggle } from '@/components/mode-toggle';
 
 const data = {
 	team: {
@@ -117,6 +116,20 @@ const data = {
 				},
 			],
 		},
+		// {
+		// 	title: 'Profile',
+		// 	url: '/profile',
+		// 	icon: UserCircle,
+		// 	description: 'Manage your profile',
+		// },
+		// {
+		// 	title: 'Settings',
+		// 	url: '/settings',
+		// 	icon: Settings,
+		// 	description: 'Manage application settings',
+		// },
+	],
+	navSecondary: [
 		{
 			title: 'Profile',
 			url: '/profile',
@@ -128,18 +141,6 @@ const data = {
 			url: '/settings',
 			icon: Settings,
 			description: 'Manage application settings',
-		},
-	],
-	navSecondary: [
-		{
-			title: 'Support',
-			url: '/support',
-			icon: LifeBuoy,
-		},
-		{
-			title: 'Feedback',
-			url: '/feedback',
-			icon: Send,
 		},
 	],
 };
@@ -155,10 +156,10 @@ export function AppSidebar() {
 					<SidebarLabel>Club Aleman Dashboard</SidebarLabel>
 					<NavMain items={data.navMain} />
 				</SidebarItem>
-				{/* <SidebarItem className='mt-auto'>
-					<SidebarLabel>Help & Support</SidebarLabel>
+				<SidebarItem className='mt-auto'>
+					<SidebarLabel>User Options</SidebarLabel>
 					<NavSecondary items={data.navSecondary} />
-				</SidebarItem> */}
+				</SidebarItem>
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={data.user} />

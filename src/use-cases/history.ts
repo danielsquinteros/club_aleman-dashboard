@@ -1,5 +1,5 @@
 import { history } from '@/data-access/history';
-import { HistoryEvent } from '@/db/schema';
+import { HistoryEvent, NewHistoryEvent } from '@/db/schema';
 
 export async function getAllHistoryEventsUseCase(): Promise<HistoryEvent[]> {
 	try {
@@ -11,7 +11,7 @@ export async function getAllHistoryEventsUseCase(): Promise<HistoryEvent[]> {
 }
 
 export async function addHistoryEventUseCase(
-	event: Omit<HistoryEvent, 'id'>,
+	event: NewHistoryEvent,
 ): Promise<void> {
 	try {
 		await history.create(event);
