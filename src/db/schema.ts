@@ -33,7 +33,7 @@ export const galleryImageSchema = z.object({
 	url: z.string(),
 	title: z.string(),
 	description: z.string().optional(),
-	uploadedAt: z.string(),
+	uploadedAt: z.date(),
 });
 
 export const eventSchema = z.object({

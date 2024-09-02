@@ -49,7 +49,7 @@ export function AddGalleryImageForm({
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
-			await onSubmit(values);
+			await onSubmit({ ...values, uploadedAt: new Date() });
 			toast.success('Gallery image added successfully');
 			form.reset();
 			onSuccess?.();
