@@ -11,7 +11,7 @@ export const gallery = {
 		const newImage = {
 			id: crypto.randomUUID(),
 			...image,
-			uploadedAt: new Date().toISOString(),
+			uploadedAt: new Date(),
 		};
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
