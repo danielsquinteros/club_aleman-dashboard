@@ -66,7 +66,7 @@ export const sessions = pgTable('sessions', {
 			onDelete: 'cascade',
 		})
 		.notNull(),
-	createdAt: timestamp('created_at').notNull().defaultNow(),
+	createdAt: timestamp('created_at').defaultNow().notNull(),
 	expiresAt: timestamp('expires_at', {
 		withTimezone: true,
 		mode: 'date',
@@ -78,10 +78,10 @@ export const members = pgTable('members', {
 	firstName: varchar('first_name', { length: 255 }).notNull(),
 	lastName: varchar('last_name', { length: 255 }).notNull(),
 	secondSurname: varchar('second_surname', { length: 255 }).notNull(),
-	email: varchar('email', { length: 255 }),
+	email: varchar('email', { length: 255 }).unique(),
 	phoneNumber: varchar('phone_number', { length: 255 }),
 	address: varchar('address', { length: 255 }),
-	role: memberRolesEnum('role').notNull(),
+	role: memberRolesEnum('role').default('member').notNull(),
 	joinDate: date('join_date').notNull(),
 	avatarUrl: varchar('avatar_url', { length: 255 }),
 });
