@@ -1,1 +1,0 @@
-ALTER TABLE "gallery_images" ALTER COLUMN "uploaded_at" SET DEFAULT now();

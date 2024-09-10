@@ -6,8 +6,6 @@ import { getAllHistoryEventsUseCase } from '@/use-cases/history';
 import { DashboardCharts } from './_components/DashboardCharts';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/lib/session';
 
 export default async function DashboardPage() {
 	const members = await getAllMembersUseCase();
