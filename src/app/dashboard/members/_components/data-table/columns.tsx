@@ -15,7 +15,7 @@ import {
 	ConfirmDialog,
 	useConfirmDialog,
 } from '@/components/ui/confirm-dialog';
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { MemberDialog } from '../MemberDialog';
 import { Loader2 } from 'lucide-react';
 
@@ -96,86 +96,83 @@ export const columns: ColumnDef<Member>[] = [
 		),
 		cell: ({ row }) => format(parseISO(row.getValue('joinDate')), 'PPP'),
 	},
-	{
-		id: 'actions',
-		header: 'Actions',
-		cell: ({ row }) => {
-			const member = row.original;
-			const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-			const { execute: executeDelete, isPending: isDeleting } = useServerAction(
-				deleteMemberAction,
-				{
-					onSuccess: () => {
-						toast.success('Member deleted successfully');
-					},
-					onError: ({ err }) => {
-						toast.error(err.message);
-					},
-				},
-			);
-			const {
-				isOpen: isConfirmOpen,
-				setIsOpen: setIsConfirmOpen,
-				openDialog: openConfirmDialog,
-				closeDialog: closeConfirmDialog,
-			} = useConfirmDialog();
-
-			const handleDelete = () => {
-				executeDelete(member.id);
-				closeConfirmDialog();
-			};
-
-			return (
-				<>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => setIsEditDialogOpen(true)}
-					>
-						<Pencil className='h-4 w-4 mr-2' />
-						Edit
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={openConfirmDialog}
-						disabled={isDeleting}
-					>
-						{isDeleting ? (
-							<Loader2 className='h-4 w-4 mr-2 animate-spin' />
-						) : (
-							<Trash2 className='h-4 w-4 mr-2' />
-						)}
-						{isDeleting ? 'Deleting...' : 'Delete'}
-					</Button>
-					<MemberDialog
-						isOpen={isEditDialogOpen}
-						onClose={() => setIsEditDialogOpen(false)}
-						initialData={member}
-					/>
-					<ConfirmDialog
-						isOpen={isConfirmOpen}
-						onOpenChange={setIsConfirmOpen}
-						title='Delete Member'
-						description='Are you sure you want to delete this member? This action cannot be undone.'
-						confirmLabel='Delete'
-						cancelLabel='Cancel'
-						onConfirm={handleDelete}
-						onCancel={closeConfirmDialog}
-						isDestructive={true}
-					/>
-				</>
-			);
-		},
-	},
 	// {
 	// 	id: 'globalFilter',
 	// 	accessorFn: (row) => {
 	// 		return Object.values(row).join(' ').toLowerCase();
 	// 	},
 	// },
+	{
+		id: 'actions',
+		header: 'Actions',
+		cell: ({ row }) => <ActionCell member={row.original} />,
+	},
 ];
 
 const parseRole = (role: MemberRole) => {
 	return memberRoles.find((r) => r.value === role)?.label;
+};
+
+const ActionCell: FC<{ member: Member }> = ({ member }) => {
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const { execute: executeDelete, isPending: isDeleting } = useServerAction(
+		deleteMemberAction,
+		{
+			onSuccess: () => {
+				toast.success('Member deleted successfully');
+			},
+			onError: ({ err }) => {
+				toast.error(err.message);
+			},
+		},
+	);
+	const {
+		isOpen: isConfirmOpen,
+		setIsOpen: setIsConfirmOpen,
+		openDialog: openConfirmDialog,
+		closeDialog: closeConfirmDialog,
+	} = useConfirmDialog();
+
+	const handleDelete = () => {
+		executeDelete(member.id);
+		closeConfirmDialog();
+	};
+
+	return (
+		<>
+			<Button variant='outline' size='sm' onClick={() => setIsDialogOpen(true)}>
+				<Pencil className='h-4 w-4 mr-2' />
+				Edit
+			</Button>
+			<Button
+				variant='outline'
+				size='sm'
+				onClick={openConfirmDialog}
+				disabled={isDeleting}
+			>
+				{isDeleting ? (
+					<Loader2 className='h-4 w-4 mr-2 animate-spin' />
+				) : (
+					<Trash2 className='h-4 w-4 mr-2' />
+				)}
+				{isDeleting ? 'Deleting...' : 'Delete'}
+			</Button>
+			<MemberDialog
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+				initialData={member}
+			/>
+			<ConfirmDialog
+				isOpen={isConfirmOpen}
+				onOpenChange={setIsConfirmOpen}
+				title='Delete Member'
+				description='Are you sure you want to delete this member? This action cannot be undone.'
+				confirmLabel='Delete'
+				cancelLabel='Cancel'
+				onConfirm={handleDelete}
+				onCancel={closeConfirmDialog}
+				isDestructive={true}
+			/>
+		</>
+	);
 };
