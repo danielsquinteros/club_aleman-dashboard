@@ -142,12 +142,7 @@ const data = {
 			icon: UserCircle,
 			description: 'Manage your profile',
 		},
-		{
-			title: 'Settings',
-			url: '/dashboard/settings',
-			icon: Settings,
-			description: 'Manage application settings',
-		},
+		// Remove the Settings item from here
 	],
 	navUser: {
 		user: {
@@ -192,7 +187,7 @@ export function AppSidebar() {
 						<NavMain items={data.navMain} />
 					</SidebarItem>
 					<SidebarItem className='mt-auto'>
-						<SidebarLabel>User Options</SidebarLabel>
+						<SidebarLabel>User Settings</SidebarLabel>
 						<NavSecondary items={data.navSecondary} />
 					</SidebarItem>
 				</SidebarContent>
