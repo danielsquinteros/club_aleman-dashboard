@@ -1,4 +1,4 @@
-import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
+import { BadgeCheck, ChevronsUpDown, LogOut, User } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -11,17 +11,19 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { signOutAction } from '@/app/auth/actions';
 
 export function NavUser({
 	user,
+	profileMenu,
+	signOutMenu,
 }: {
 	user: {
 		name: string;
 		email: string;
 		avatar: string;
 	};
+	signOutMenu: () => void;
+	profileMenu: () => void;
 }) {
 	return (
 		<DropdownMenu>
@@ -42,14 +44,15 @@ export function NavUser({
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<Link href='/profile'>
-						<DropdownMenuItem>
-							<BadgeCheck className='mr-2 h-4 w-4' /> Profile
-						</DropdownMenuItem>
-					</Link>
+					<DropdownMenuItem onClick={profileMenu} className='cursor-pointer'>
+						<User className='mr-2 h-4 w-4' /> Profile
+					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem onClick={() => signOutAction()}>
+				<DropdownMenuItem
+					onClick={signOutMenu}
+					className='cursor-pointer focus:bg-red-500/40 bg-red-500/30 text-destructive-foreground'
+				>
 					<LogOut className='mr-2 h-4 w-4' /> Log out
 				</DropdownMenuItem>
 			</DropdownMenuContent>

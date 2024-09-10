@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
 	Users,
 	UserPlus,
@@ -28,6 +29,11 @@ import {
 	SidebarItem,
 	SidebarLabel,
 } from '@/components/ui/sidebar';
+import { profileAction, signOutAction } from '@/app/auth/actions';
+import {
+	ConfirmDialog,
+	useConfirmDialog,
+} from '@/components/ui/confirm-dialog';
 
 const data = {
 	team: {
@@ -143,27 +149,67 @@ const data = {
 			description: 'Manage application settings',
 		},
 	],
+	navUser: {
+		user: {
+			name: 'Admin User',
+			email: 'admin@clubaleman.cl',
+			avatar: '/avatars/admin.jpg',
+		},
+		signOutMenu: () => {
+			signOutAction();
+		},
+		profileMenu: () => {
+			profileAction();
+		},
+	},
 };
 
 export function AppSidebar() {
+	const { isOpen, setIsOpen, openDialog } = useConfirmDialog();
+
+	const handleSignOut = () => {
+		openDialog();
+	};
+
+	const confirmSignOut = () => {
+		signOutAction();
+	};
+
+	const navUserData = {
+		...data.navUser,
+		signOutMenu: handleSignOut,
+	};
+
 	return (
-		<Sidebar>
-			<SidebarHeader>
-				<Logo team={data.team} />
-			</SidebarHeader>
-			<SidebarContent>
-				<SidebarItem>
-					<SidebarLabel>Club Aleman Dashboard</SidebarLabel>
-					<NavMain items={data.navMain} />
-				</SidebarItem>
-				<SidebarItem className='mt-auto'>
-					<SidebarLabel>User Options</SidebarLabel>
-					<NavSecondary items={data.navSecondary} />
-				</SidebarItem>
-			</SidebarContent>
-			<SidebarFooter>
-				<NavUser user={data.user} />
-			</SidebarFooter>
-		</Sidebar>
+		<>
+			<Sidebar>
+				<SidebarHeader>
+					<Logo team={data.team} />
+				</SidebarHeader>
+				<SidebarContent>
+					<SidebarItem>
+						<SidebarLabel>Club Aleman Dashboard</SidebarLabel>
+						<NavMain items={data.navMain} />
+					</SidebarItem>
+					<SidebarItem className='mt-auto'>
+						<SidebarLabel>User Options</SidebarLabel>
+						<NavSecondary items={data.navSecondary} />
+					</SidebarItem>
+				</SidebarContent>
+				<SidebarFooter>
+					<NavUser {...navUserData} />
+				</SidebarFooter>
+			</Sidebar>
+			<ConfirmDialog
+				isOpen={isOpen}
+				onOpenChange={setIsOpen}
+				title='Confirm Sign Out'
+				description='Are you sure you want to sign out?'
+				confirmLabel='Sign Out'
+				cancelLabel='Cancel'
+				onConfirm={confirmSignOut}
+				isDestructive={true}
+			/>
+		</>
 	);
 }

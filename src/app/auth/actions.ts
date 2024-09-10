@@ -38,3 +38,12 @@ export async function signOutAction() {
 	);
 	redirect('/auth/login');
 }
+
+export async function profileAction() {
+	const { session } = await validateRequest();
+
+	if (!session) {
+		redirect('/auth/login');
+	}
+	redirect('/dashboard/profile');
+}
