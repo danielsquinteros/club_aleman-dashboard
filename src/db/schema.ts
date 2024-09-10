@@ -43,14 +43,14 @@ export const memberRoles = [
 	{ label: 'Board Member', value: 'board_member' },
 	{ label: 'Honor Advisor', value: 'honor_advisor' },
 	{ label: 'Honor Member', value: 'honor_member' },
-] as const;
+];
 
 export const eventStatuses = [
 	{ label: 'Upcoming', value: 'upcoming' },
 	{ label: 'Ongoing', value: 'ongoing' },
 	{ label: 'Completed', value: 'completed' },
 	{ label: 'Cancelled', value: 'cancelled' },
-] as const;
+];
 
 export const users = pgTable('users', {
 	id: serial('id').primaryKey(),

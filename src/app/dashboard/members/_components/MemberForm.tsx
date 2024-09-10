@@ -71,7 +71,7 @@ export function MemberForm({
 			firstName: initialValues?.firstName || '',
 			lastName: initialValues?.lastName || '',
 			secondSurname: initialValues?.secondSurname || '',
-			role: initialValues?.role || memberRoles[0].value,
+			role: initialValues?.role || memberRolesEnum.enumValues[0],
 			phoneNumber: initialValues?.phoneNumber || '',
 			email: initialValues?.email || '',
 			address: initialValues?.address || '',

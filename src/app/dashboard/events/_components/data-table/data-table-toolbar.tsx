@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from '@/components/ui/data-table-view-options';
 
 import { DataTableFacetedFilter } from '@/components/ui/data-table-faceted-filter';
-import { statuses } from '@/db/data/events';
+import { eventStatuses } from '@/db/schema';
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
@@ -34,7 +34,7 @@ export function DataTableToolbar<TData>({
 					<DataTableFacetedFilter
 						column={table.getColumn('status')}
 						title='Status'
-						options={statuses}
+						options={eventStatuses}
 					/>
 				)}
 
