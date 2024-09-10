@@ -1,20 +1,29 @@
-import { galleryImagesList } from '@/db/data/gallery';
-import { NewGalleryImage } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { galleryImages, NewGalleryImage, GalleryImage } from '@/db/schema';
 
-export const gallery = {
-	getAll: async () => {
-		// Simulating an API call with a delay
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		return galleryImagesList;
+export const galleryDataAccess = {
+	getAll: async (): Promise<GalleryImage[]> => {
+		return await db.select().from(galleryImages);
 	},
-	create: async (image: NewGalleryImage) => {
-		const newImage = {
-			id: crypto.randomUUID(),
-			...image,
-			uploadedAt: new Date(),
-		};
-
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		galleryImagesList.push(newImage);
+	create: async (image: NewGalleryImage): Promise<void> => {
+		await db.insert(galleryImages).values(image);
+	},
+	getById: async (id: number): Promise<GalleryImage | undefined> => {
+		const result = await db
+			.select()
+			.from(galleryImages)
+			.where(eq(galleryImages.id, id))
+			.limit(1);
+		return result[0];
+	},
+	update: async (
+		id: number,
+		image: Partial<NewGalleryImage>,
+	): Promise<void> => {
+		await db.update(galleryImages).set(image).where(eq(galleryImages.id, id));
+	},
+	delete: async (id: number): Promise<void> => {
+		await db.delete(galleryImages).where(eq(galleryImages.id, id));
 	},
 };

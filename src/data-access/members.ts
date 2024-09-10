@@ -1,19 +1,26 @@
-import { membersList } from '@/db/data/members';
-import { NewMember } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { members, NewMember } from '@/db/schema';
 
-export const members = {
+export const membersDataAccess = {
 	getAll: async () => {
-		// Simulating an API call with a delay
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		return membersList;
+		return await db.select().from(members);
 	},
 	create: async (member: NewMember) => {
-		const newMember = {
-			id: crypto.randomUUID(),
-			...member,
-		};
-
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		membersList.push(newMember);
+		await db.insert(members).values(member);
+	},
+	getById: async (id: number) => {
+		const result = await db
+			.select()
+			.from(members)
+			.where(eq(members.id, Number(id)))
+			.limit(1);
+		return result[0] || null;
+	},
+	update: async (id: number, member: Partial<NewMember>) => {
+		await db.update(members).set(member).where(eq(members.id, id));
+	},
+	delete: async (id: number) => {
+		await db.delete(members).where(eq(members.id, id));
 	},
 };

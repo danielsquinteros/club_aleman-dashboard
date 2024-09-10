@@ -922,38 +922,3 @@ export const membersList: Member[] = [
 		joinDate: '2025-04-20',
 	},
 ];
-
-export const roles = [
-	{
-		label: 'Member',
-		value: 'member',
-	},
-	{
-		label: 'Honor Member',
-		value: 'honor_member',
-	},
-	{
-		label: 'Board Member',
-		value: 'board_member',
-	},
-	{
-		label: 'Honor Advisor',
-		value: 'honor_advisor',
-	},
-	{
-		label: 'President',
-		value: 'president',
-	},
-	{
-		label: 'Vice President',
-		value: 'vice_president',
-	},
-	{
-		label: 'Secretary',
-		value: 'secretary',
-	},
-	{
-		label: 'Treasurer',
-		value: 'treasurer',
-	},
-];

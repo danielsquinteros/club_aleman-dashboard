@@ -1,19 +1,26 @@
-import { historyEventsList } from '@/db/data/history';
-import { NewHistoryEvent } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { historyEvents, NewHistoryEvent } from '@/db/schema';
 
-export const history = {
+export const historyDataAccess = {
 	getAll: async () => {
-		// Simulating an API call with a delay
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		return historyEventsList;
+		return await db.select().from(historyEvents);
 	},
 	create: async (event: NewHistoryEvent) => {
-		const newEvent = {
-			id: crypto.randomUUID(),
-			...event,
-		};
-
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		historyEventsList.push(newEvent);
+		await db.insert(historyEvents).values(event);
+	},
+	getById: async (id: number) => {
+		const result = await db
+			.select()
+			.from(historyEvents)
+			.where(eq(historyEvents.id, Number(id)))
+			.limit(1);
+		return result[0] || null;
+	},
+	update: async (id: number, event: Partial<NewHistoryEvent>) => {
+		await db.update(historyEvents).set(event).where(eq(historyEvents.id, id));
+	},
+	delete: async (id: number) => {
+		await db.delete(historyEvents).where(eq(historyEvents.id, id));
 	},
 };

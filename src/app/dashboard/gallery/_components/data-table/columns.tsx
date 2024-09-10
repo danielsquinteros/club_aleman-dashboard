@@ -1,0 +1,126 @@
+'use client';
+
+import { ColumnDef } from '@tanstack/react-table';
+import { GalleryImage } from '@/db/schema';
+import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
+import Image from 'next/image';
+import { useState } from 'react';
+import {
+	useConfirmDialog,
+	ConfirmDialog,
+} from '@/components/ui/confirm-dialog';
+import { Pencil, Loader2, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { useServerAction } from 'zsa-react';
+import { Button } from '@/components/ui/button';
+import { GalleryImageDialog } from '../GalleryImageDialog';
+import { deleteGalleryImageAction } from '../../actions';
+
+export const columns: ColumnDef<GalleryImage>[] = [
+	{
+		accessorKey: 'title',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Title' />
+		),
+	},
+	{
+		accessorKey: 'url',
+		header: 'Image',
+		cell: ({ row }) => (
+			<img
+				src={row.getValue('url')}
+				alt={row.getValue('title')}
+				width={100}
+				height={100}
+				className='object-cover rounded-md'
+			/>
+		),
+	},
+	{
+		accessorKey: 'description',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Description' />
+		),
+	},
+	{
+		accessorKey: 'uploadedAt',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Uploaded At' />
+		),
+		cell: ({ row }) => {
+			const date = new Date(row.getValue('uploadedAt'));
+			return date.toLocaleDateString();
+		},
+	},
+	{
+		id: 'actions',
+		cell: ({ row }) => {
+			const image = row.original;
+			const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+			const { execute: executeDelete, isPending: isDeleting } = useServerAction(
+				deleteGalleryImageAction,
+				{
+					onSuccess: () => {
+						toast.success('Gallery image deleted successfully');
+					},
+					onError: ({ err }) => {
+						toast.error(err.message);
+					},
+				},
+			);
+			const {
+				isOpen: isConfirmOpen,
+				setIsOpen: setIsConfirmOpen,
+				openDialog: openConfirmDialog,
+				closeDialog: closeConfirmDialog,
+			} = useConfirmDialog();
+
+			const handleDelete = () => {
+				executeDelete(image.id);
+				closeConfirmDialog();
+			};
+
+			return (
+				<>
+					<Button
+						variant='outline'
+						size='sm'
+						onClick={() => setIsEditDialogOpen(true)}
+					>
+						<Pencil className='h-4 w-4 mr-2' />
+						Edit
+					</Button>
+					<Button
+						variant='outline'
+						size='sm'
+						onClick={openConfirmDialog}
+						disabled={isDeleting}
+					>
+						{isDeleting ? (
+							<Loader2 className='h-4 w-4 mr-2 animate-spin' />
+						) : (
+							<Trash2 className='h-4 w-4 mr-2' />
+						)}
+						{isDeleting ? 'Deleting...' : 'Delete'}
+					</Button>
+					<GalleryImageDialog
+						isOpen={isEditDialogOpen}
+						onClose={() => setIsEditDialogOpen(false)}
+						initialData={image}
+					/>
+					<ConfirmDialog
+						isOpen={isConfirmOpen}
+						onOpenChange={setIsConfirmOpen}
+						title='Delete Gallery Image'
+						description='Are you sure you want to delete this gallery image? This action cannot be undone.'
+						confirmLabel='Delete'
+						cancelLabel='Cancel'
+						onConfirm={handleDelete}
+						onCancel={closeConfirmDialog}
+						isDestructive={true}
+					/>
+				</>
+			);
+		},
+	},
+];

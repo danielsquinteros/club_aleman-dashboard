@@ -1,19 +1,26 @@
-import { eventsList } from '@/db/data/events';
-import { NewEvent } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { events, NewEvent } from '@/db/schema';
 
-export const events = {
+export const eventsDataAccess = {
 	getAll: async () => {
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		return eventsList;
+		return await db.select().from(events);
 	},
 	create: async (event: NewEvent) => {
-		const newEvent = {
-			id: crypto.randomUUID(),
-			...event,
-			createdAt: new Date().toISOString(),
-		};
-
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		eventsList.push(newEvent);
+		await db.insert(events).values(event);
+	},
+	getById: async (id: number) => {
+		const result = await db
+			.select()
+			.from(events)
+			.where(eq(events.id, Number(id)))
+			.limit(1);
+		return result[0] || null;
+	},
+	update: async (id: number, event: Partial<NewEvent>) => {
+		await db.update(events).set(event).where(eq(events.id, id));
+	},
+	delete: async (id: number) => {
+		await db.delete(events).where(eq(events.id, id));
 	},
 };

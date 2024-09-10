@@ -28,7 +28,7 @@ export default function RootLayout({
 					<div className='flex flex-col h-screen'>
 						<div className='flex-1'>{children}</div>
 					</div>
-					<Toaster />
+					<Toaster richColors />
 				</ThemeProvider>
 			</body>
 		</html>

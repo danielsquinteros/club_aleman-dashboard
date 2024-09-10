@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { signOutAction } from '@/app/auth/actions';
 
 export function NavUser({
 	user,
@@ -48,11 +49,9 @@ export function NavUser({
 					</Link>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<Link href='/auth/login'>
-					<DropdownMenuItem>
-						<LogOut className='mr-2 h-4 w-4' /> Log out
-					</DropdownMenuItem>
-				</Link>
+				<DropdownMenuItem onClick={() => signOutAction()}>
+					<LogOut className='mr-2 h-4 w-4' /> Log out
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

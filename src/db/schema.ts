@@ -1,6 +1,29 @@
-import { z } from 'zod';
+import {
+	pgTable,
+	serial,
+	varchar,
+	date,
+	text,
+	integer,
+	timestamp,
+	pgEnum,
+} from 'drizzle-orm/pg-core';
+import { createInsertSchema } from 'drizzle-zod';
 
-export const memberRoleSchema = z.enum([
+export const eventStatusesEnum = pgEnum('event_status', [
+	'upcoming',
+	'ongoing',
+	'completed',
+	'cancelled',
+]);
+
+export const userRolesEnum = pgEnum('user_role', [
+	'super_admin',
+	'admin',
+	'user',
+]);
+
+export const memberRolesEnum = pgEnum('member_role', [
 	'member',
 	'president',
 	'vice_president',
@@ -11,56 +34,98 @@ export const memberRoleSchema = z.enum([
 	'honor_member',
 ]);
 
-export const eventStatusSchema = z.enum([
-	'upcoming',
-	'ongoing',
-	'completed',
-	'cancelled',
-]);
+export const memberRoles = [
+	{ label: 'Member', value: 'member' },
+	{ label: 'President', value: 'president' },
+	{ label: 'Vice President', value: 'vice_president' },
+	{ label: 'Secretary', value: 'secretary' },
+	{ label: 'Treasurer', value: 'treasurer' },
+	{ label: 'Board Member', value: 'board_member' },
+	{ label: 'Honor Advisor', value: 'honor_advisor' },
+	{ label: 'Honor Member', value: 'honor_member' },
+] as const;
 
-export const memberSchema = z.object({
-	id: z.string(),
-	firstName: z.string(),
-	lastName: z.string(),
-	secondSurname: z.string(),
-	role: memberRoleSchema,
-	joinDate: z.string(),
-	avatarUrl: z.string().optional(),
+export const eventStatuses = [
+	{ label: 'Upcoming', value: 'upcoming' },
+	{ label: 'Ongoing', value: 'ongoing' },
+	{ label: 'Completed', value: 'completed' },
+	{ label: 'Cancelled', value: 'cancelled' },
+] as const;
+
+export const users = pgTable('users', {
+	id: serial('id').primaryKey(),
+	email: varchar('username', { length: 255 }).notNull(),
+	password: varchar('password', { length: 255 }).notNull(),
+	role: userRolesEnum('role').default('user').notNull(),
 });
 
-export const galleryImageSchema = z.object({
-	id: z.string(),
-	url: z.string(),
-	title: z.string(),
-	description: z.string().optional(),
-	uploadedAt: z.date(),
+export const sessions = pgTable('sessions', {
+	id: text('id').primaryKey(),
+	userId: integer('user_id')
+		.references(() => users.id, {
+			onDelete: 'cascade',
+		})
+		.notNull(),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	expiresAt: timestamp('expires_at', {
+		withTimezone: true,
+		mode: 'date',
+	}).notNull(),
 });
 
-export const eventSchema = z.object({
-	id: z.string(),
-	title: z.string(),
-	description: z.string(),
-	date: z.string(),
-	location: z.string(),
-	status: eventStatusSchema,
+export const members = pgTable('members', {
+	id: serial('id').primaryKey(),
+	firstName: varchar('first_name', { length: 255 }).notNull(),
+	lastName: varchar('last_name', { length: 255 }).notNull(),
+	secondSurname: varchar('second_surname', { length: 255 }).notNull(),
+	email: varchar('email', { length: 255 }),
+	phoneNumber: varchar('phone_number', { length: 255 }),
+	address: varchar('address', { length: 255 }),
+	role: memberRolesEnum('role').notNull(),
+	joinDate: date('join_date').notNull(),
+	avatarUrl: varchar('avatar_url', { length: 255 }),
 });
 
-export const historyEventSchema = z.object({
-	id: z.string(),
-	year: z.number(),
-	event: z.string(),
+export const galleryImages = pgTable('gallery_images', {
+	id: serial('id').primaryKey(),
+	url: varchar('url', { length: 255 }).notNull(),
+	title: varchar('title', { length: 255 }).notNull(),
+	description: text('description'),
+	uploadedAt: date('uploaded_at').defaultNow().notNull(),
 });
 
-export type Member = z.infer<typeof memberSchema>;
-export type NewMember = Omit<Member, 'id'>;
-export type MemberRole = z.infer<typeof memberRoleSchema>;
+export const events = pgTable('events', {
+	id: serial('id').primaryKey(),
+	title: varchar('title', { length: 255 }).notNull(),
+	description: text('description').notNull(),
+	date: date('date').notNull(),
+	location: varchar('location', { length: 255 }).notNull(),
+	status: eventStatusesEnum('status').notNull(),
+});
 
-export type Event = z.infer<typeof eventSchema>;
-export type NewEvent = Omit<Event, 'id'>;
-export type EventStatus = z.infer<typeof eventStatusSchema>;
+export const historyEvents = pgTable('history_events', {
+	id: serial('id').primaryKey(),
+	year: integer('year').notNull(),
+	event: text('event').notNull(),
+});
 
-export type GalleryImage = z.infer<typeof galleryImageSchema>;
-export type NewGalleryImage = Omit<GalleryImage, 'id'>;
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+export type UserRole = User['role'];
+export type UserId = User['id'];
 
-export type HistoryEvent = z.infer<typeof historyEventSchema>;
-export type NewHistoryEvent = Omit<HistoryEvent, 'id'>;
+export type Member = typeof members.$inferSelect;
+export type NewMember = typeof members.$inferInsert;
+export type MemberRole = NewMember['role'];
+export const memberSchema = createInsertSchema(members);
+
+export type Event = typeof events.$inferSelect;
+export type NewEvent = typeof events.$inferInsert;
+export type EventStatus = NewEvent['status'];
+export const eventSchema = createInsertSchema(events);
+
+export type GalleryImage = typeof galleryImages.$inferSelect;
+export type NewGalleryImage = typeof galleryImages.$inferInsert;
+
+export type HistoryEvent = typeof historyEvents.$inferSelect;
+export type NewHistoryEvent = typeof historyEvents.$inferInsert;

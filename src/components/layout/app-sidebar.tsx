@@ -42,24 +42,24 @@ const data = {
 	navMain: [
 		{
 			title: 'Dashboard',
-			url: '/',
+			url: '/dashboard',
 			icon: Home,
 			description: 'Overview of club activities',
 		},
 		{
 			title: 'Members',
-			url: '/members',
+			url: '/dashboard/members',
 			icon: Users,
 			items: [
 				{
 					title: 'All Members',
-					url: '/members',
+					url: '/dashboard/members',
 					icon: Users,
 					description: 'View and manage all members',
 				},
 				{
 					title: 'Add Member',
-					url: '/members/add',
+					url: '/dashboard/members/add',
 					icon: UserPlus,
 					description: 'Add a new member to the club',
 				},
@@ -67,51 +67,51 @@ const data = {
 		},
 		{
 			title: 'Events',
-			url: '/events',
+			url: '/dashboard/events',
 			icon: Calendar,
 			items: [
 				{
 					title: 'All Events',
-					url: '/events',
+					url: '/dashboard/events',
 					description: 'View and manage all events',
 				},
 				{
 					title: 'Add Event',
-					url: '/events/add',
+					url: '/dashboard/events/add',
 					description: 'Create a new event',
 				},
 			],
 		},
 		{
 			title: 'Gallery',
-			url: '/gallery',
+			url: '/dashboard/gallery',
 			icon: Image,
 			items: [
 				{
 					title: 'All Images',
-					url: '/gallery',
+					url: '/dashboard/gallery',
 					description: 'View and manage gallery images',
 				},
 				{
 					title: 'Upload Image',
-					url: '/gallery/add',
+					url: '/dashboard/gallery/add',
 					description: 'Upload new images to the gallery',
 				},
 			],
 		},
 		{
 			title: 'History',
-			url: '/history',
+			url: '/dashboard/history',
 			icon: BookOpenText,
 			items: [
 				{
 					title: 'Timeline',
-					url: '/history',
+					url: '/dashboard/history',
 					description: 'View and edit club history',
 				},
 				{
 					title: 'Add Event',
-					url: '/history/add',
+					url: '/dashboard/history/add',
 					description: 'Add a new historical event',
 				},
 			],
@@ -132,13 +132,13 @@ const data = {
 	navSecondary: [
 		{
 			title: 'Profile',
-			url: '/profile',
+			url: '/dashboard/profile',
 			icon: UserCircle,
 			description: 'Manage your profile',
 		},
 		{
 			title: 'Settings',
-			url: '/settings',
+			url: '/dashboard/settings',
 			icon: Settings,
 			description: 'Manage application settings',
 		},
