@@ -17,6 +17,7 @@ export const upsertHistoryEventAction = adminAction
 			event: z.string().min(2, {
 				message: 'Event description must be at least 2 characters.',
 			}),
+			description: z.string().optional(),
 		}),
 	)
 	.handler(async ({ input, ctx: { user } }) => {

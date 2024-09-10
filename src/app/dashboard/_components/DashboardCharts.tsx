@@ -66,7 +66,7 @@ export function DashboardCharts() {
 								<CartesianGrid vertical={false} />
 								<XAxis dataKey='name' />
 								<YAxis />
-								<Line type='monotone' dataKey='total' stroke='#8884d8' />
+								<Line type='monotone' dataKey='total' stroke='#ff0000' />
 							</LineChart>
 						</ChartContainer>
 					)}
@@ -86,7 +86,7 @@ export function DashboardCharts() {
 								<CartesianGrid vertical={false} />
 								<XAxis dataKey='name' />
 								<YAxis />
-								<Bar dataKey='total' fill='#8884d8' />
+								<Bar dataKey='total' fill='#ffd700' />
 							</BarChart>
 						</ChartContainer>
 					)}

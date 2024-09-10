@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Member, MemberRole, memberRoles } from '@/db/schema';
+import { Member } from '@/db/schema';
 import { format, parseISO } from 'date-fns';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ import {
 import { useState, FC } from 'react';
 import { MemberDialog } from '../MemberDialog';
 import { Loader2 } from 'lucide-react';
+import { parseMemberRole } from '@/lib/parse-labels';
 
 export const columns: ColumnDef<Member>[] = [
 	{
@@ -64,7 +65,7 @@ export const columns: ColumnDef<Member>[] = [
 			<DataTableColumnHeader column={column} title='Role' />
 		),
 		cell: ({ row }) => (
-			<Badge variant='outline'>{parseRole(row.getValue('role'))}</Badge>
+			<Badge variant='outline'>{parseMemberRole(row.getValue('role'))}</Badge>
 		),
 		filterFn: (row, id, value) => {
 			return value.includes(row.getValue(id));
@@ -108,10 +109,6 @@ export const columns: ColumnDef<Member>[] = [
 		cell: ({ row }) => <ActionCell member={row.original} />,
 	},
 ];
-
-const parseRole = (role: MemberRole) => {
-	return memberRoles.find((r) => r.value === role)?.label;
-};
 
 const ActionCell: FC<{ member: Member }> = ({ member }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);

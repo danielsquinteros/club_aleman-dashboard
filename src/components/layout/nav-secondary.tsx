@@ -28,9 +28,9 @@ export function NavSecondary({
 		setMounted(true);
 	}, []);
 
-	if (!items?.length) {
-		return null;
-	}
+	// if (!items?.length) {
+	// 	return null;
+	// }
 
 	const toggleTheme = () => {
 		setTheme(theme === 'dark' ? 'light' : 'dark');

@@ -9,6 +9,7 @@ import {
 	pgEnum,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 export const eventStatusesEnum = pgEnum('event_status', [
 	'upcoming',
@@ -34,6 +35,18 @@ export const memberRolesEnum = pgEnum('member_role', [
 	'honor_member',
 ]);
 
+export const mediaItemTypesEnum = pgEnum('media_item_type', [
+	'menu',
+	'event',
+	'general',
+]);
+
+export const mediaItemTypes = [
+	{ label: 'Menu', value: 'menu' },
+	{ label: 'Event', value: 'event' },
+	{ label: 'General', value: 'general' },
+];
+
 export const memberRoles = [
 	{ label: 'Member', value: 'member' },
 	{ label: 'President', value: 'president' },
@@ -50,6 +63,12 @@ export const eventStatuses = [
 	{ label: 'Ongoing', value: 'ongoing' },
 	{ label: 'Completed', value: 'completed' },
 	{ label: 'Cancelled', value: 'cancelled' },
+];
+
+export const userRoles = [
+	{ label: 'Super Admin', value: 'super_admin' },
+	{ label: 'Admin', value: 'admin' },
+	{ label: 'User', value: 'user' },
 ];
 
 export const users = pgTable('users', {
@@ -107,12 +126,25 @@ export const historyEvents = pgTable('history_events', {
 	id: serial('id').primaryKey(),
 	year: integer('year').notNull(),
 	event: text('event').notNull(),
+	description: text('description'),
+});
+
+export const mediaItems = pgTable('media_items', {
+	id: serial('id').primaryKey(),
+	title: varchar('title', { length: 255 }).notNull(),
+	url: varchar('url', { length: 255 }).notNull(),
+	description: text('description'),
+	type: mediaItemTypesEnum('type').default('general').notNull(),
+	uploadedAt: timestamp('uploaded_at').defaultNow().notNull(),
 });
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type UserRole = User['role'];
 export type UserId = User['id'];
+export const userSchema = createInsertSchema(users).extend({
+	password: z.string().min(8).optional(),
+});
 
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
@@ -129,3 +161,8 @@ export type NewGalleryImage = typeof galleryImages.$inferInsert;
 
 export type HistoryEvent = typeof historyEvents.$inferSelect;
 export type NewHistoryEvent = typeof historyEvents.$inferInsert;
+
+export type MediaItem = typeof mediaItems.$inferSelect;
+export type NewMediaItem = typeof mediaItems.$inferInsert;
+export type MediaItemType = NewMediaItem['type'];
+export const mediaItemSchema = createInsertSchema(mediaItems);

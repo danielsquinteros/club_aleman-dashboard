@@ -24,8 +24,8 @@ export default async function DashboardLayout({
 				<SidebarTrigger />
 			</header>
 			<div className='flex flex-1'>
-				<AppSidebar />
-				<main className='flex-1 p-4 overflow-y-auto'>
+				<AppSidebar user={user} />
+				<main className='flex-1 p-4 overflow-y-auto '>
 					<div className='max-w-7xl mx-auto'>{children}</div>
 				</main>
 			</div>

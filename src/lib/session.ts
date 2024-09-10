@@ -1,5 +1,5 @@
 import 'server-only';
-import { AuthenticationError } from '@/use-cases/errors';
+import { AuthenticationError, AuthorizationError } from '@/use-cases/errors';
 import { lucia, validateRequest } from '@/auth';
 import { cache } from 'react';
 import { cookies } from 'next/headers';
@@ -17,6 +17,22 @@ export const assertAuthenticated = async () => {
 	const user = await getCurrentUser();
 	if (!user) {
 		throw new AuthenticationError();
+	}
+	return user;
+};
+
+export const assertAdmin = async () => {
+	const user = await assertAuthenticated();
+	if (user.role !== 'admin') {
+		throw new AuthorizationError();
+	}
+	return user;
+};
+
+export const assertSuperAdmin = async () => {
+	const user = await assertAuthenticated();
+	if (user.role !== 'super_admin') {
+		throw new AuthorizationError();
 	}
 	return user;
 };

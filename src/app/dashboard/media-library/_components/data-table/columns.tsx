@@ -1,26 +1,25 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Event } from '@/db/schema';
-import { format, parseISO } from 'date-fns';
+import { MediaItem } from '@/db/schema';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useServerAction } from 'zsa-react';
-import { deleteEventAction } from '../../actions';
+import { deleteMediaItemAction } from '../../actions';
 import { toast } from 'sonner';
 import {
 	ConfirmDialog,
 	useConfirmDialog,
 } from '@/components/ui/confirm-dialog';
-import { useState } from 'react';
-import { EventDialog } from '../EventDialog';
+import { useState, FC } from 'react';
+import { MediaItemDialog } from '../MediaItemDialog';
 import { Loader2 } from 'lucide-react';
-import { FC } from 'react';
-import { parseStatus } from '@/lib/parse-labels';
+import { parseMediaItemType } from '@/lib/parse-labels';
 
-export const columns: ColumnDef<Event>[] = [
+export const columns: ColumnDef<MediaItem>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
@@ -41,6 +40,20 @@ export const columns: ColumnDef<Event>[] = [
 		enableHiding: false,
 	},
 	{
+		accessorKey: 'url',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Image' />
+		),
+		cell: ({ row }) => (
+			<img
+				src={row.getValue('url')}
+				alt='Media Item'
+				width={100}
+				height={100}
+			/>
+		),
+	},
+	{
 		accessorKey: 'title',
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title='Title' />
@@ -53,39 +66,38 @@ export const columns: ColumnDef<Event>[] = [
 		),
 	},
 	{
-		accessorKey: 'date',
+		accessorKey: 'type',
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Date' />
+			<DataTableColumnHeader column={column} title='Type' />
 		),
-		cell: ({ row }) => format(parseISO(row.getValue('date')), 'PPP'),
-	},
-	{
-		accessorKey: 'location',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Location' />
+		cell: ({ row }) => (
+			<Badge>{parseMediaItemType(row.getValue('type'))}</Badge>
 		),
 	},
 	{
-		accessorKey: 'status',
+		accessorKey: 'uploadedAt',
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Status' />
+			<DataTableColumnHeader column={column} title='Uploaded At' />
 		),
-		cell: ({ row }) => parseStatus(row.getValue('status')),
+		cell: ({ row }) => {
+			const date = new Date(row.getValue('uploadedAt'));
+			return date.toLocaleDateString();
+		},
 	},
 	{
 		id: 'actions',
 		header: 'Actions',
-		cell: ({ row }) => <ActionCell event={row.original} />,
+		cell: ({ row }) => <ActionCell mediaItem={row.original} />,
 	},
 ];
 
-const ActionCell: FC<{ event: Event }> = ({ event }) => {
+const ActionCell: FC<{ mediaItem: MediaItem }> = ({ mediaItem }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const { execute: executeDelete, isPending: isDeleting } = useServerAction(
-		deleteEventAction,
+		deleteMediaItemAction,
 		{
 			onSuccess: () => {
-				toast.success('Event deleted successfully');
+				toast.success('Media item deleted successfully');
 			},
 			onError: ({ err }) => {
 				toast.error(err.message);
@@ -100,7 +112,7 @@ const ActionCell: FC<{ event: Event }> = ({ event }) => {
 	} = useConfirmDialog();
 
 	const handleDelete = () => {
-		executeDelete(event.id);
+		executeDelete(mediaItem.id);
 		closeConfirmDialog();
 	};
 
@@ -123,16 +135,16 @@ const ActionCell: FC<{ event: Event }> = ({ event }) => {
 				)}
 				{isDeleting ? 'Deleting...' : 'Delete'}
 			</Button>
-			<EventDialog
+			<MediaItemDialog
 				isOpen={isDialogOpen}
 				onClose={() => setIsDialogOpen(false)}
-				initialData={event}
+				initialData={mediaItem}
 			/>
 			<ConfirmDialog
 				isOpen={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}
-				title='Delete Event'
-				description='Are you sure you want to delete this event? This action cannot be undone.'
+				title='Delete Media Item'
+				description='Are you sure you want to delete this media item? This action cannot be undone.'
 				confirmLabel='Delete'
 				cancelLabel='Cancel'
 				onConfirm={handleDelete}

@@ -22,8 +22,9 @@ const formSchema = z.object({
 	id: z.number().optional(),
 	year: z.number().int().min(1800).max(new Date().getFullYear()),
 	event: z.string().min(2, {
-		message: 'Event description must be at least 2 characters.',
+		message: 'Event title must be at least 2 characters.',
 	}),
+	description: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,6 +59,7 @@ export function HistoryEventForm({
 			id: initialData?.id,
 			year: initialData?.year || new Date().getFullYear(),
 			event: initialData?.event || '',
+			description: initialData?.description || '',
 		},
 	});
 
@@ -88,6 +90,19 @@ export function HistoryEventForm({
 				<FormField
 					control={form.control}
 					name='event'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Event Title</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='description'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Event Description</FormLabel>

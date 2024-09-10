@@ -29,6 +29,12 @@ export const columns: ColumnDef<HistoryEvent>[] = [
 		),
 	},
 	{
+		accessorKey: 'description',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Description' />
+		),
+	},
+	{
 		id: 'actions',
 		header: 'Actions',
 		cell: ({ row }) => <ActionCell historyEvent={row.original} />,

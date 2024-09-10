@@ -1,26 +1,25 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Event } from '@/db/schema';
-import { format, parseISO } from 'date-fns';
+import { User } from '@/db/schema';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useServerAction } from 'zsa-react';
-import { deleteEventAction } from '../../actions';
+import { deleteUserAction } from '../../actions';
 import { toast } from 'sonner';
 import {
 	ConfirmDialog,
 	useConfirmDialog,
 } from '@/components/ui/confirm-dialog';
-import { useState } from 'react';
-import { EventDialog } from '../EventDialog';
+import { useState, FC } from 'react';
+import { UserDialog } from '../UserDialog';
 import { Loader2 } from 'lucide-react';
-import { FC } from 'react';
-import { parseStatus } from '@/lib/parse-labels';
+import { parseUserRole } from '@/lib/parse-labels';
 
-export const columns: ColumnDef<Event>[] = [
+export const columns: ColumnDef<User>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
@@ -41,51 +40,39 @@ export const columns: ColumnDef<Event>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: 'title',
+		accessorKey: 'email',
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Title' />
+			<DataTableColumnHeader column={column} title='Email' />
 		),
+		enableColumnFilter: true,
 	},
 	{
-		accessorKey: 'description',
+		accessorKey: 'role',
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Description' />
+			<DataTableColumnHeader column={column} title='Role' />
 		),
-	},
-	{
-		accessorKey: 'date',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Date' />
+		cell: ({ row }) => (
+			<Badge variant='outline'>{parseUserRole(row.getValue('role'))}</Badge>
 		),
-		cell: ({ row }) => format(parseISO(row.getValue('date')), 'PPP'),
-	},
-	{
-		accessorKey: 'location',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Location' />
-		),
-	},
-	{
-		accessorKey: 'status',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Status' />
-		),
-		cell: ({ row }) => parseStatus(row.getValue('status')),
+		filterFn: (row, id, value) => {
+			return value.includes(row.getValue(id));
+		},
+		enableColumnFilter: true,
 	},
 	{
 		id: 'actions',
 		header: 'Actions',
-		cell: ({ row }) => <ActionCell event={row.original} />,
+		cell: ({ row }) => <ActionCell user={row.original} />,
 	},
 ];
 
-const ActionCell: FC<{ event: Event }> = ({ event }) => {
+const ActionCell: FC<{ user: User }> = ({ user }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const { execute: executeDelete, isPending: isDeleting } = useServerAction(
-		deleteEventAction,
+		deleteUserAction,
 		{
 			onSuccess: () => {
-				toast.success('Event deleted successfully');
+				toast.success('User deleted successfully');
 			},
 			onError: ({ err }) => {
 				toast.error(err.message);
@@ -100,7 +87,7 @@ const ActionCell: FC<{ event: Event }> = ({ event }) => {
 	} = useConfirmDialog();
 
 	const handleDelete = () => {
-		executeDelete(event.id);
+		executeDelete(user.id);
 		closeConfirmDialog();
 	};
 
@@ -123,16 +110,16 @@ const ActionCell: FC<{ event: Event }> = ({ event }) => {
 				)}
 				{isDeleting ? 'Deleting...' : 'Delete'}
 			</Button>
-			<EventDialog
+			<UserDialog
 				isOpen={isDialogOpen}
 				onClose={() => setIsDialogOpen(false)}
-				initialData={event}
+				initialData={user}
 			/>
 			<ConfirmDialog
 				isOpen={isConfirmOpen}
 				onOpenChange={setIsConfirmOpen}
-				title='Delete Event'
-				description='Are you sure you want to delete this event? This action cannot be undone.'
+				title='Delete User'
+				description='Are you sure you want to delete this user? This action cannot be undone.'
 				confirmLabel='Delete'
 				cancelLabel='Cancel'
 				onConfirm={handleDelete}
