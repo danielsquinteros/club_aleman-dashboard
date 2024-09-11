@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { membersDataAccess } from '@/data-access/members';
 
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
 	try {
 		const members = await membersDataAccess.getAll();
