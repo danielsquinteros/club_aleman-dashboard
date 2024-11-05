@@ -17,19 +17,7 @@ export async function upsertClubHistoryUseCase(
 	history: Partial<ClubHistory> & Pick<ClubHistory, 'content'>,
 ): Promise<void> {
 	try {
-		if ('id' in history && history.id) {
-			const id = Number(history.id);
-			if (isNaN(id)) {
-				throw new Error('Invalid ID');
-			}
-			const existingHistory = await historyDataAccess.getById(id);
-			if (!existingHistory) {
-				throw new NotFoundError('History');
-			}
-			await historyDataAccess.update(history.content);
-		} else {
-			await historyDataAccess.create(history as NewClubHistory);
-		}
+		await historyDataAccess.create(history as NewClubHistory);
 	} catch (error) {
 		console.error('Failed to upsert club history:', error);
 		if (error instanceof NotFoundError) {
