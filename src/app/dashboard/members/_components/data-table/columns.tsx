@@ -136,7 +136,7 @@ const ActionCell: FC<{ member: Member }> = ({ member }) => {
 	};
 
 	return (
-		<>
+		<div className='flex gap-2'>
 			<Button variant='outline' size='sm' onClick={() => setIsDialogOpen(true)}>
 				<Pencil className='h-4 w-4 mr-2' />
 				Edit
@@ -170,6 +170,6 @@ const ActionCell: FC<{ member: Member }> = ({ member }) => {
 				onCancel={closeConfirmDialog}
 				isDestructive={true}
 			/>
-		</>
+		</div>
 	);
 };
