@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -45,12 +47,14 @@ export const columns: ColumnDef<MediaItem>[] = [
 			<DataTableColumnHeader column={column} title='Image' />
 		),
 		cell: ({ row }) => (
-			<img
-				src={row.getValue('url')}
-				alt='Media Item'
-				width={100}
-				height={100}
-			/>
+			<div className='relative h-12 w-20'>
+				<Image
+					src={row.getValue('url')}
+					alt='Media Item'
+					fill
+					className='object-cover'
+				/>
+			</div>
 		),
 	},
 	{

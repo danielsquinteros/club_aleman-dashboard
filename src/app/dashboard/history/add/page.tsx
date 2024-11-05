@@ -16,8 +16,8 @@ export default function AddEventPage() {
 	return (
 		<div className='space-y-6'>
 			<h1 className='text-3xl font-bold'>Add New History Event</h1>
-			<div className='flex justify-center items-center'>
-				<Card className='min-w-[600px]'>
+			<div className='flex'>
+				<Card className='w-full max-w-2xl'>
 					<CardHeader>
 						<CardTitle>Add a new event to the club history</CardTitle>
 						<CardDescription>

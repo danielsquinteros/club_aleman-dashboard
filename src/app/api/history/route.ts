@@ -6,8 +6,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
 	try {
-		const events = await historyDataAccess.getAll();
-		return NextResponse.json(events);
+		const history = await historyDataAccess.get();
+		return NextResponse.json(history);
 	} catch (error) {
 		console.error('Error fetching history events:', error);
 		return NextResponse.json(

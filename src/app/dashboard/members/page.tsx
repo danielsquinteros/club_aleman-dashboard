@@ -2,7 +2,6 @@ import { getAllMembersUseCase } from '@/use-cases/members';
 import { columns } from './_components/data-table/columns';
 import { DataTable } from './_components/data-table/data-table';
 import { AddMemberButton } from './_components/AddMemberButton';
-import { DataTableToolbar } from './_components/data-table/data-table-toolbar';
 
 export default async function MembersPage() {
 	const members = await getAllMembersUseCase();

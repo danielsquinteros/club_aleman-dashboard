@@ -36,8 +36,8 @@ export default function AddGalleryImagePage() {
 	return (
 		<div className='space-y-6'>
 			<h1 className='text-3xl font-bold'>Add Gallery Image</h1>
-			<div className='flex justify-center items-center'>
-				<Card className='min-w-[600px]'>
+			<div className='flex'>
+				<Card className='w-full max-w-3xl'>
 					<CardHeader>
 						<CardTitle>Add a new image to the gallery</CardTitle>
 						<CardDescription>

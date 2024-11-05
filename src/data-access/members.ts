@@ -1,10 +1,10 @@
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { members, NewMember } from '@/db/schema';
 
 export const membersDataAccess = {
 	getAll: async () => {
-		return await db.select().from(members);
+		return await db.select().from(members).orderBy(asc(members.id));
 	},
 	create: async (member: NewMember) => {
 		await db.insert(members).values(member);

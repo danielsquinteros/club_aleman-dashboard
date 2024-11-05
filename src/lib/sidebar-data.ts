@@ -90,19 +90,14 @@ export const getSidebarData = (userRole: UserRole) => ({
 			],
 		},
 		{
-			title: 'History',
+			title: 'Club History',
 			url: '/dashboard/history',
 			icon: BookOpenText,
 			items: [
 				{
-					title: 'Timeline',
+					title: 'Edit History',
 					url: '/dashboard/history',
 					description: 'View and edit club history',
-				},
-				{
-					title: 'Add Event',
-					url: '/dashboard/history/add',
-					description: 'Add a new historical event',
 				},
 			],
 		},

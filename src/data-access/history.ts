@@ -1,26 +1,31 @@
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { historyEvents, NewHistoryEvent } from '@/db/schema';
+import { clubHistory, NewClubHistory } from '@/db/schema';
 
 export const historyDataAccess = {
-	getAll: async () => {
-		return await db.select().from(historyEvents);
-	},
-	create: async (event: NewHistoryEvent) => {
-		await db.insert(historyEvents).values(event);
-	},
-	getById: async (id: number) => {
+	get: async () => {
 		const result = await db
 			.select()
-			.from(historyEvents)
-			.where(eq(historyEvents.id, Number(id)))
-			.limit(1);
+			.from(clubHistory)
+			.orderBy(desc(clubHistory.updatedAt));
 		return result[0] || null;
 	},
-	update: async (id: number, event: Partial<NewHistoryEvent>) => {
-		await db.update(historyEvents).set(event).where(eq(historyEvents.id, id));
+	create: async (history: NewClubHistory) => {
+		await db.insert(clubHistory).values(history);
+	},
+
+	update: async (content: string) => {
+		const [history] = await db
+			.insert(clubHistory)
+			.values({ content })
+			.onConflictDoUpdate({
+				target: clubHistory.id,
+				set: { content, updatedAt: new Date() },
+			})
+			.returning();
+		return history;
 	},
 	delete: async (id: number) => {
-		await db.delete(historyEvents).where(eq(historyEvents.id, id));
+		await db.delete(clubHistory).where(eq(clubHistory.id, id));
 	},
 };

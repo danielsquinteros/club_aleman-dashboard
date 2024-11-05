@@ -122,11 +122,10 @@ export const events = pgTable('events', {
 	status: eventStatusesEnum('status').notNull(),
 });
 
-export const historyEvents = pgTable('history_events', {
+export const clubHistory = pgTable('club_history', {
 	id: serial('id').primaryKey(),
-	year: integer('year').notNull(),
-	event: text('event').notNull(),
-	description: text('description'),
+	content: text('content').notNull(),
+	updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 export const mediaItems = pgTable('media_items', {
@@ -159,8 +158,8 @@ export const eventSchema = createInsertSchema(events);
 export type GalleryImage = typeof galleryImages.$inferSelect;
 export type NewGalleryImage = typeof galleryImages.$inferInsert;
 
-export type HistoryEvent = typeof historyEvents.$inferSelect;
-export type NewHistoryEvent = typeof historyEvents.$inferInsert;
+export type ClubHistory = typeof clubHistory.$inferSelect;
+export type NewClubHistory = typeof clubHistory.$inferInsert;
 
 export type MediaItem = typeof mediaItems.$inferSelect;
 export type NewMediaItem = typeof mediaItems.$inferInsert;

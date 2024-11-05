@@ -13,7 +13,7 @@ export async function getAllMembersUseCase(): Promise<Member[]> {
 
 export async function upsertMemberUseCase(member: NewMember): Promise<void> {
 	try {
-		if ('id' in member && member.id) {
+		if ('id' in member && member.id !== undefined && member.id !== null) {
 			const id = Number(member.id);
 			if (isNaN(id)) {
 				throw new Error('Invalid ID');

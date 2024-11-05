@@ -1,66 +1,40 @@
 import { historyDataAccess } from '@/data-access/history';
-import { HistoryEvent, NewHistoryEvent } from '@/db/schema';
+import { ClubHistory, NewClubHistory } from '@/db/schema';
 import { NotFoundError } from './errors';
 
-export async function getAllHistoryEventsUseCase(): Promise<HistoryEvent[]> {
+export async function getClubHistoryUseCase(): Promise<
+	ClubHistory | undefined
+> {
 	try {
-		return await historyDataAccess.getAll();
+		return await historyDataAccess.get();
 	} catch (error) {
-		console.error('Error fetching history events:', error);
-		throw new Error('Failed to fetch history events');
+		console.error('Error fetching club history:', error);
+		throw new Error('Failed to fetch club history');
 	}
 }
 
-export async function upsertHistoryEventUseCase(
-	event: Partial<HistoryEvent> & Pick<HistoryEvent, 'year' | 'event'>,
+export async function upsertClubHistoryUseCase(
+	history: Partial<ClubHistory> & Pick<ClubHistory, 'content'>,
 ): Promise<void> {
 	try {
-		if ('id' in event && event.id) {
-			const id = Number(event.id);
+		if ('id' in history && history.id) {
+			const id = Number(history.id);
 			if (isNaN(id)) {
 				throw new Error('Invalid ID');
 			}
-			const existingEvent = await historyDataAccess.getById(id);
-			if (!existingEvent) {
+			const existingHistory = await historyDataAccess.getById(id);
+			if (!existingHistory) {
 				throw new NotFoundError('History');
 			}
-			await historyDataAccess.update(id, event);
+			await historyDataAccess.update(history.content);
 		} else {
-			await historyDataAccess.create(event as NewHistoryEvent);
+			await historyDataAccess.create(history as NewClubHistory);
 		}
 	} catch (error) {
-		console.error('Failed to upsert history event:', error);
+		console.error('Failed to upsert club history:', error);
 		if (error instanceof NotFoundError) {
 			throw error;
 		}
-		throw new Error('Failed to upsert history event');
-	}
-}
-
-export async function getHistoryEventByIdUseCase(
-	id: number,
-): Promise<HistoryEvent | null> {
-	try {
-		const event = await historyDataAccess.getById(id);
-		return event || null;
-	} catch (error) {
-		console.error('Error fetching history event:', error);
-		throw new Error('Failed to fetch history event');
-	}
-}
-
-export async function deleteHistoryEventUseCase(id: number): Promise<void> {
-	try {
-		const existingEvent = await historyDataAccess.getById(id);
-		if (!existingEvent) {
-			throw new NotFoundError('History');
-		}
-		await historyDataAccess.delete(id);
-	} catch (error) {
-		console.error('Failed to delete history event:', error);
-		if (error instanceof NotFoundError) {
-			throw error;
-		}
-		throw new Error('Failed to delete history event');
+		throw new Error('Failed to upsert club history');
 	}
 }

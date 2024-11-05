@@ -30,6 +30,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
 	id: z.number().optional(),
@@ -100,7 +101,7 @@ export function EventForm({
 						<FormItem>
 							<FormLabel>Description</FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<Textarea {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
